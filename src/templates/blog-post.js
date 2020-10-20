@@ -6,7 +6,7 @@ import Layout from "../components/layout"
 import SEO from "../components/seo"
 
 const BlogPostTemplate = ({ data, location }) => {
-  const post = data.markdownRemark
+  const post = data.Mdx
   const siteTitle = data.site.siteMetadata?.title || `Title`
   const { previous, next } = data
 
@@ -15,6 +15,7 @@ const BlogPostTemplate = ({ data, location }) => {
       <SEO
         title={post.frontmatter.title}
         description={post.frontmatter.description || post.excerpt}
+        thumbnail={post.frontmatter.thumbnail}
       />
       <article
         className="blog-post"
@@ -77,17 +78,17 @@ export const pageQuery = graphql`
         title
       }
     }
-    markdownRemark(id: { eq: $id }) {
+    Mdx(id: { eq: $id }) {
       id
       excerpt(pruneLength: 160)
-      html
       frontmatter {
         title
         date(formatString: "MMMM DD, YYYY")
         description
+        thumbnail
       }
     }
-    previous: markdownRemark(id: { eq: $previousPostId }) {
+    previous: Mdx(id: { eq: $previousPostId }) {
       fields {
         slug
       }
@@ -95,7 +96,7 @@ export const pageQuery = graphql`
         title
       }
     }
-    next: markdownRemark(id: { eq: $nextPostId }) {
+    next: Mdx(id: { eq: $nextPostId }) {
       fields {
         slug
       }
