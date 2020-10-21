@@ -6,7 +6,7 @@ import Layout from "../components/layout"
 import SEO from "../components/seo"
 
 const BlogPostTemplate = ({ data, location }) => {
-  const post = data.Mdx
+  const post = data.mdx
   const siteTitle = data.site.siteMetadata?.title || `Title`
   const { previous, next } = data
 
@@ -27,7 +27,7 @@ const BlogPostTemplate = ({ data, location }) => {
           <p>{post.frontmatter.date}</p>
         </header>
         <section
-          dangerouslySetInnerHTML={{ __html: post.html }}
+          dangerouslySetInnerHTML={{ __html: post.body }}
           itemProp="articleBody"
         />
         <hr />
@@ -78,17 +78,23 @@ export const pageQuery = graphql`
         title
       }
     }
-    Mdx(id: { eq: $id }) {
+    mdx(id: { eq: $id }) {
       id
       excerpt(pruneLength: 160)
       frontmatter {
         title
         date(formatString: "MMMM DD, YYYY")
         description
-        thumbnail
+        thumbnail {
+          childImageSharp {
+            fluid {
+              src
+            }
+          }
+        }
       }
     }
-    previous: Mdx(id: { eq: $previousPostId }) {
+    previous: mdx(id: { eq: $previousPostId }) {
       fields {
         slug
       }
@@ -96,7 +102,7 @@ export const pageQuery = graphql`
         title
       }
     }
-    next: Mdx(id: { eq: $nextPostId }) {
+    next: mdx(id: { eq: $nextPostId }) {
       fields {
         slug
       }

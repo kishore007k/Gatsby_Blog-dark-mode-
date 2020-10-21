@@ -10,29 +10,28 @@ exports.createPages = async ({ graphql, actions, reporter }) => {
   // Get all markdown blog posts sorted by date
   const result = await graphql(
     `
-    query MyQuery {
-      allMdx(sort: {fields: frontmatter___date, order: DESC}) {
-        nodes {
-          excerpt
-          slug
-          id
-          frontmatter {
-            date
-            description
-            thumbnail {
-              absolutePath
-              relativePath
-              publicURL
-              childImageSharp {
-                fluid(maxWidth: 1000) {
-                  src
+      query MyQuery {
+        allMdx(sort: { fields: frontmatter___date, order: DESC }) {
+          nodes {
+            id
+            slug
+            excerpt
+            frontmatter {
+              date
+              description
+              thumbnail {
+                relativePath
+                publicURL
+                childImageSharp {
+                  fluid(maxWidth: 1000) {
+                    ...GatsbyImageSharpFluid
+                  }
                 }
               }
             }
           }
         }
       }
-    }
     `
   )
 

@@ -7,7 +7,7 @@ import SEO from "../components/seo"
 
 const BlogIndex = ({ data, location }) => {
   const siteTitle = data.site.siteMetadata?.title || `Title`
-  const posts = data.allMarkdownRemark.nodes
+  const posts = data.allMdx.nodes
 
   if (posts.length === 0) {
     return (
@@ -74,6 +74,7 @@ export const pageQuery = graphql`
     }
     allMdx(sort: { fields: [frontmatter___date], order: DESC }) {
       nodes {
+        id
         excerpt
         fields {
           slug
@@ -82,7 +83,15 @@ export const pageQuery = graphql`
           date(formatString: "MMMM DD, YYYY")
           title
           description
-          thumbnail
+          thumbnail {
+            childImageSharp {
+              fluid(maxWidth: 1000) {
+                ...GatsbyImageSharpFluid
+              }
+            }
+            publicURL
+            relativePath
+          }
         }
       }
     }
